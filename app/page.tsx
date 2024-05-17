@@ -2,7 +2,10 @@
 
 import hero from '@/assets/bg_1.jpeg'
 import content from '@/assets/bg_2.jpeg'
+import gsap from 'gsap'
+import { ReactLenis } from 'lenis/react'
 import Image from 'next/image'
+import { useEffect, useRef } from 'react'
 
 function Hero() {
   return (
@@ -40,20 +43,22 @@ function Content() {
 }
 
 export default function Home() {
-  // useEffect(() => {
-  //   const lenis = new Lenis()
+  const lenisRef = useRef<{ lenis?: any }>(null)
+  useEffect(() => {
+    function update(time: number) {
+      lenisRef.current?.lenis?.raf(time * 1000)
+    }
 
-  //   function raf(time: number) {
-  //     lenis.raf(time)
-  //     requestAnimationFrame(raf)
-  //   }
+    gsap.ticker.add(update)
 
-  //   requestAnimationFrame(raf)
-  // }, [])
+    return () => {
+      gsap.ticker.remove(update)
+    }
+  })
   return (
-    <main className='relative'>
+    <ReactLenis ref={lenisRef} autoRaf={false}>
       <Hero />
       <Content />
-    </main>
+    </ReactLenis>
   )
 }
