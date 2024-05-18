@@ -8,7 +8,7 @@ import { useEffect } from 'react'
 
 function Hero() {
   return (
-    <div className='h-screen bg-[#C72626] text-[3.5vw] flex flex-col items-center justify-center text-white pb-[10vh]'>
+    <div className='sticky top-0 h-screen bg-[#C72626] text-[3.5vw] flex flex-col items-center justify-center text-white pb-[10vh]'>
       <p>Scroll Perspective</p>
       <div className='flex gap-4'>
         <section>Section</section>
@@ -44,7 +44,6 @@ function Content() {
 export default function Home() {
   useEffect(() => {
     const lenis = new Lenis()
-
     function raf(time: number) {
       lenis.raf(time)
       requestAnimationFrame(raf)
@@ -53,7 +52,7 @@ export default function Home() {
     requestAnimationFrame(raf)
   }, [])
   return (
-    <main>
+    <main className='relative h-[200vh]'>
       <Hero />
       <Content />
     </main>
