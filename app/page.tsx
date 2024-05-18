@@ -2,13 +2,29 @@
 
 import hero from '@/assets/bg_1.jpeg'
 import content from '@/assets/bg_2.jpeg'
+import {
+  motion,
+  useScroll,
+  useTransform,
+  type MotionValue,
+} from 'framer-motion'
 import Lenis from 'lenis'
 import Image from 'next/image'
-import { useEffect } from 'react'
+import { useEffect, useRef } from 'react'
 
-function Hero() {
+interface Props {
+  scrollYProgress: MotionValue<number>
+}
+
+function Hero({ scrollYProgress }: Props) {
+  const scale = useTransform(scrollYProgress, [0, 1], [1, 0.8])
+  const rotate = useTransform(scrollYProgress, [0, 1], [0, -5])
+
   return (
-    <div className='sticky top-0 h-screen bg-[#C72626] text-[3.5vw] flex flex-col items-center justify-center text-white pb-[10vh]'>
+    <motion.div
+      style={{ scale, rotate }}
+      className='sticky top-0 h-screen rounded bg-[#C72626] text-[3.5vw] flex flex-col items-center justify-center text-white pb-[10vh]'
+    >
       <p>Scroll Perspective</p>
       <div className='flex gap-4'>
         <section>Section</section>
@@ -23,13 +39,15 @@ function Hero() {
         </div>
         <p>Transition</p>
       </div>
-    </div>
+    </motion.div>
   )
 }
 
-function Content() {
+function Content({ scrollYProgress }: Props) {
+  const scale = useTransform(scrollYProgress, [0, 1], [0.8, 1])
+  const rotate = useTransform(scrollYProgress, [0, 1], [-5, 0])
   return (
-    <div className='relative h-screen'>
+    <motion.div style={{ scale, rotate }} className='relative rounded h-screen'>
       <Image
         src={content}
         alt='content image'
@@ -37,11 +55,17 @@ function Content() {
         fill
         sizes='(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw'
       />
-    </div>
+    </motion.div>
   )
 }
 
 export default function Home() {
+  const container = useRef<HTMLElement | null>(null)
+  const { scrollYProgress } = useScroll({
+    target: container,
+    offset: ['start start', 'end end'],
+  })
+
   useEffect(() => {
     const lenis = new Lenis()
     function raf(time: number) {
@@ -52,9 +76,9 @@ export default function Home() {
     requestAnimationFrame(raf)
   }, [])
   return (
-    <main className='relative h-[200vh]'>
-      <Hero />
-      <Content />
+    <main ref={container} className='relative h-[200vh]'>
+      <Hero scrollYProgress={scrollYProgress} />
+      <Content scrollYProgress={scrollYProgress} />
     </main>
   )
 }
