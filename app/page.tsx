@@ -23,7 +23,7 @@ function Hero({ scrollYProgress }: Props) {
   return (
     <motion.div
       style={{ scale, rotate }}
-      className='sticky top-0 h-screen rounded bg-[#C72626] text-[3.5vw] flex flex-col items-center justify-center text-white pb-[10vh]'
+      className='sticky top-0 flex h-screen flex-col items-center justify-center rounded bg-[#C72626] pb-[10vh] text-[3.5vw] text-white'
     >
       <p>Scroll Perspective</p>
       <div className='flex gap-4'>
@@ -47,7 +47,7 @@ function Content({ scrollYProgress }: Props) {
   const scale = useTransform(scrollYProgress, [0, 1], [0.8, 1])
   const rotate = useTransform(scrollYProgress, [0, 1], [-5, 0])
   return (
-    <motion.div style={{ scale, rotate }} className='relative rounded h-screen'>
+    <motion.div style={{ scale, rotate }} className='relative h-screen rounded'>
       <Image
         src={content}
         alt='content image'
